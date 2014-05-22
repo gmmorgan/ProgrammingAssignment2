@@ -21,13 +21,13 @@ makeCacheMatrix <- function(x = matrix()) {
                  # that is, in the environment of makeCacheMatrix.
                  # a "normal" assignment would create a new local variable that masked
                  # one in the lexical environment, and this would vanish on exit, so we
-                 #don't do that.
+                 # don't do that.
       cached.inverse <<- NULL   # As we have changed our matrix, we no longer have a chached inverse.
    }
    
    # the get function omits the "{}" as it only contains one statement
    # It was done like this to confuse us poor students, but it didn't work!
-   get <- function() x #return the lexically scoped variable x
+   get <- function() x # return the lexically scoped variable x
 
    # Another single statement function. I included the braces to un-obfuscate
    # Cache the provided inverse matrix.
@@ -50,18 +50,19 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## Return a matrix that is the inverse of 'x'
+## A function that caches the inverse for a special matrix object.
 ## The parameter x is a special matrix object created with makeCacheMatrix().
+## Return a matrix that is the inverse of 'x'. 
 ## The function caches the result for efficiency reasons.
 cacheSolve <- function(x, ...) {
-   inv <- x$getinverse()    # The matrix m is either the cached inverse previously stored in x,
-                            # or it is NULL.
-   if (!is.null(inv)) {     # If we have a previously cached matrix in x, 
-      #message("setting cached inverse") # For debugging
-      return (invisible(inv)) # Then return it
+   inverse <- x$getinverse()      # The matrix "inverse" is either the cached inverse previously stored in x,
+                                  # or it is NULL.
+   if (!is.null(inverse)) {       # If we have a previously cached matrix in x, 
+# For debugging     message("setting cached inverse")
+      return (invisible(inverse)) # Then return it
    }
-   mat <- x$get()           # else get the original matrix 
-   inv <- solve(mat, ...)   # calculate the inverse (for this assignment we assume matrix is invertible)
-   x$setinverse(inv)        # cache it for future calls
-   invisible(inv)           # return it. (but don't print it)
+   mat <- x$get()                 # else get the original matrix 
+   inverse <- solve(mat, ...)     # calculate the inverse (for this assignment we assume matrix is invertible)
+   x$setinverse(inverse)          # cache it for future calls
+   invisible(inverse)             # return it. (but don't print it)
 }
